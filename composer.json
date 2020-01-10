@@ -1,0 +1,24 @@
+{
+    "name": "infection/include-interceptor",
+    "description": "Stream Wrapper: Include Interceptor. Allows to replace included (autoloaded) file with another one.",
+    "type": "library",
+    "license": "BSD-3-Clause",
+    "authors": [
+        {
+            "name": "Maks Rafalko",
+            "email": "maks.rafalko@gmail.com"
+        }
+    ],
+    "autoload": {
+        "psr-4": {
+            "Infection\\StreamWrapper\\": "src/"
+        }
+    },
+    "config": {
+        "platform": {
+            "php": "7.2.9"
+        },
+        "sort-packages": true
+    },
+    "require": {}
+}
