@@ -112,6 +112,7 @@ prerequisites: report-php-version build/cache vendor/autoload.php .phan composer
 # Do install if there's no 'vendor'
 vendor/autoload.php:
 	$(SILENT) $(COMPOSER) install --prefer-dist
+	test -d vendor/infection/infection/src/StreamWrapper/ && rm -fr vendor/infection/infection/src/StreamWrapper/ && $(SILENT) $(COMPOSER) dump-autoload || true
 
 # If composer.lock is older than `composer.json`, do update,
 # and touch composer.lock because composer not always does that
