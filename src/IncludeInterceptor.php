@@ -42,6 +42,7 @@ use RuntimeException;
 
 final class IncludeInterceptor
 {
+    public const LOCATION = __DIR__;
     private const STREAM_OPEN_FOR_INCLUDE = 0x00000080;
 
     /**
