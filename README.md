@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.org/infection/include-interceptor.svg?branch=master)](https://travis-ci.org/infection/include-interceptor)
+
 # Infection - Include Interceptor Stream Wrapper
 
 It's a [Stream Wrapper](https://www.php.net/manual/en/book.stream.php) that wraps a [`file://`](https://www.php.net/manual/en/wrappers.file.php) protocol and allows overriding content of any (auto) loaded file, including files autoloaded by Composer package manager.
