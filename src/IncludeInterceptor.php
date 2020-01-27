@@ -176,6 +176,7 @@ final class IncludeInterceptor
             self::enable();
         }
 
+        /* @phan-suppress-next-line PhanPossiblyUndeclaredVariable */
         return $return;
     }
 
@@ -193,6 +194,7 @@ final class IncludeInterceptor
             self::enable();
         }
 
+        /* @phan-suppress-next-line PhanPossiblyUndeclaredVariable */
         return $return;
     }
 
@@ -210,6 +212,7 @@ final class IncludeInterceptor
             self::enable();
         }
 
+        /* @phan-suppress-next-line PhanPossiblyUndeclaredVariable */
         return $return;
     }
 
@@ -281,6 +284,7 @@ final class IncludeInterceptor
             self::enable();
         }
 
+        /* @phan-suppress-next-line PhanPossiblyUndeclaredVariable */
         return $return;
     }
 
@@ -366,6 +370,7 @@ final class IncludeInterceptor
             self::enable();
         }
 
+        /* @phan-suppress-next-line PhanPossiblyUndeclaredVariable */
         return $return;
     }
 
