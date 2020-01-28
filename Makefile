@@ -100,6 +100,7 @@ analyze: cs
 
 cs: test-prerequisites
 	$(SILENT) $(PHP) $(PHP_CS_FIXER) $(PHP_CS_FIXER_ARGS) --diff fix
+	LC_ALL=C sort -u .gitignore -o .gitignore
 
 ##############################################################
 # Prerequisites Setup                                        #
