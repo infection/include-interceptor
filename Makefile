@@ -2,7 +2,7 @@
 
 # Use any most recent PHP version
 PHP=$(shell which php)
-PHPDBG=phpdbg -qrr
+PHPDBG=php
 
 # Default parallelism
 JOBS=$(shell nproc)
