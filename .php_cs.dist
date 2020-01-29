@@ -47,21 +47,12 @@ $header = trim(sprintf(
 $finder = Finder::create()
     ->in(__DIR__)
     ->exclude([
-        '.ci',
-        '.composer',
         '.github',
-        '.tools',
         'build',
-        'devTools',
-        'resources',
-        'tests/e2e',
-        'tests/phpunit/Fixtures',
     ])
     ->ignoreDotFiles(false)
     ->name('*php')
     ->name('.php_cs.dist')
-    ->name('infection')
-    ->name('infection-debug')
 ;
 
 return Config::create()
