@@ -14,6 +14,7 @@
         "friendsofphp/php-cs-fixer": "^2.16",
         "infection/infection": "^0.15.0",
         "phan/phan": "^2.4",
+        "php-coveralls/php-coveralls": "^2.2",
         "phpstan/phpstan": "^0.12.8",
         "phpunit/phpunit": "^8.5",
         "vimeo/psalm": "^3.8"
