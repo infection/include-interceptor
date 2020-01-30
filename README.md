@@ -1,4 +1,5 @@
 [![Build Status](https://travis-ci.org/infection/include-interceptor.svg?branch=master)](https://travis-ci.org/infection/include-interceptor)
+[![Coverage Status](https://coveralls.io/repos/github/infection/include-interceptor/badge.svg?branch=master)](https://coveralls.io/github/infection/include-interceptor?branch=master)
 
 # Infection - Include Interceptor Stream Wrapper
 
