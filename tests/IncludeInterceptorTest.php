@@ -36,11 +36,13 @@ declare(strict_types=1);
 namespace Infection\Tests\StreamWrapper;
 
 use function count;
+use Exception;
 use Infection\StreamWrapper\IncludeInterceptor;
 use InvalidArgumentException;
 use const PHP_SAPI;
 use PHPUnit\Framework\Error\Warning;
 use PHPUnit\Framework\TestCase;
+use function register_shutdown_function;
 use RuntimeException;
 
 /**
@@ -118,7 +120,7 @@ final class IncludeInterceptorTest extends TestCase
         // Sanity check
         $this->assertStringContainsString('1', $before);
 
-        IncludeInterceptor::intercept(self::$files[1], self::$files[2]);
+        IncludeInterceptor::intercept(self::$files[1], self::$files[2], $this->getShutdownFunction());
         IncludeInterceptor::enable();
 
         $after = file_get_contents(self::$files[1]);
@@ -133,7 +135,7 @@ final class IncludeInterceptorTest extends TestCase
         $before = include self::$files[1];
         $this->assertSame(1, $before);
 
-        IncludeInterceptor::intercept(self::$files[1], self::$files[2]);
+        IncludeInterceptor::intercept(self::$files[1], self::$files[2], $this->getShutdownFunction());
         IncludeInterceptor::enable();
 
         $after = include self::$files[1];
@@ -151,7 +153,7 @@ final class IncludeInterceptorTest extends TestCase
         $before = include self::$files[3];
         $this->assertSame(3, $before);
 
-        IncludeInterceptor::intercept(self::$files[1], self::$files[2]);
+        IncludeInterceptor::intercept(self::$files[1], self::$files[2], $this->getShutdownFunction());
         IncludeInterceptor::enable();
 
         $after = include self::$files[3];
@@ -166,7 +168,7 @@ final class IncludeInterceptorTest extends TestCase
         if (PHP_SAPI === 'phpdbg') {
             $this->markTestSkipped('Running this test on PHPDBG has issues with FD_SETSIZE. Consider removing this if that issue has been fixed.');
         }
-        IncludeInterceptor::intercept(self::$files[1], self::$files[2]);
+        IncludeInterceptor::intercept(self::$files[1], self::$files[2], $this->getShutdownFunction());
         IncludeInterceptor::enable();
 
         /*
@@ -206,7 +208,7 @@ final class IncludeInterceptorTest extends TestCase
 
     public function test_passthrough_dir_methods_pass(): void
     {
-        IncludeInterceptor::intercept(self::$files[1], self::$files[2]);
+        IncludeInterceptor::intercept(self::$files[1], self::$files[2], $this->getShutdownFunction());
         IncludeInterceptor::enable();
 
         /*
@@ -239,7 +241,7 @@ final class IncludeInterceptorTest extends TestCase
     {
         $expected = include self::$files[2];
 
-        IncludeInterceptor::intercept(self::$files[1], self::$files[2]);
+        IncludeInterceptor::intercept(self::$files[1], self::$files[2], $this->getShutdownFunction());
         IncludeInterceptor::enable();
 
         try {
@@ -259,7 +261,7 @@ final class IncludeInterceptorTest extends TestCase
     {
         $expected = include self::$files[2];
 
-        IncludeInterceptor::intercept(self::$files[1], self::$files[2]);
+        IncludeInterceptor::intercept(self::$files[1], self::$files[2], $this->getShutdownFunction());
         IncludeInterceptor::enable();
 
         try {
@@ -279,7 +281,7 @@ final class IncludeInterceptorTest extends TestCase
     {
         $expected = include self::$files[2];
 
-        IncludeInterceptor::intercept(self::$files[1], self::$files[2]);
+        IncludeInterceptor::intercept(self::$files[1], self::$files[2], $this->getShutdownFunction());
         IncludeInterceptor::enable();
 
         try {
@@ -299,7 +301,7 @@ final class IncludeInterceptorTest extends TestCase
     {
         $expected = include self::$files[2];
 
-        IncludeInterceptor::intercept(self::$files[1], self::$files[2]);
+        IncludeInterceptor::intercept(self::$files[1], self::$files[2], $this->getShutdownFunction());
         IncludeInterceptor::enable();
 
         try {
@@ -319,7 +321,7 @@ final class IncludeInterceptorTest extends TestCase
     {
         $expected = include self::$files[2];
 
-        IncludeInterceptor::intercept(self::$files[1], self::$files[2]);
+        IncludeInterceptor::intercept(self::$files[1], self::$files[2], $this->getShutdownFunction());
         IncludeInterceptor::enable();
 
         try {
@@ -339,7 +341,7 @@ final class IncludeInterceptorTest extends TestCase
     {
         $expected = include self::$files[2];
 
-        IncludeInterceptor::intercept(self::$files[1], self::$files[2]);
+        IncludeInterceptor::intercept(self::$files[1], self::$files[2], $this->getShutdownFunction());
         IncludeInterceptor::enable();
 
         try {
@@ -363,7 +365,7 @@ final class IncludeInterceptorTest extends TestCase
     {
         $expected = include self::$files[2];
 
-        IncludeInterceptor::intercept(self::$files[1], self::$files[2]);
+        IncludeInterceptor::intercept(self::$files[1], self::$files[2], $this->getShutdownFunction());
         IncludeInterceptor::enable();
 
         try {
@@ -383,7 +385,7 @@ final class IncludeInterceptorTest extends TestCase
     {
         $expected = include self::$files[2];
 
-        IncludeInterceptor::intercept(self::$files[1], self::$files[2]);
+        IncludeInterceptor::intercept(self::$files[1], self::$files[2], $this->getShutdownFunction());
         IncludeInterceptor::enable();
 
         try {
@@ -403,7 +405,7 @@ final class IncludeInterceptorTest extends TestCase
     {
         $expected = include self::$files[2];
 
-        IncludeInterceptor::intercept(self::$files[1], self::$files[2]);
+        IncludeInterceptor::intercept(self::$files[1], self::$files[2], $this->getShutdownFunction());
         IncludeInterceptor::enable();
 
         try {
@@ -417,5 +419,30 @@ final class IncludeInterceptorTest extends TestCase
         }
 
         $this->fail('Badly set up test, exception was not thrown');
+    }
+
+    public function test_it_throws_an_exception_if_the_file_was_not_intercepted_in_the_current_process(): void
+    {
+        $value = 0;
+
+        $shutdownHandler = static function () use (&$value): void {
+            $value = 1;
+        };
+
+        IncludeInterceptor::intercept(self::$files[1], self::$files[2], $shutdownHandler);
+        IncludeInterceptor::enable();
+
+        register_shutdown_function(static function () use (&$value): void {
+            if ($value !== 1) {
+                throw new Exception('IncludeInterceptor\'s shutdown function was not executed.');
+            }
+        });
+
+        $this->addToAssertionCount(1);
+    }
+
+    private function getShutdownFunction(): callable
+    {
+        return static function (): void {};
     }
 }

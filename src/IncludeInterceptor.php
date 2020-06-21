@@ -38,6 +38,8 @@ namespace Infection\StreamWrapper;
 use function assert;
 use InvalidArgumentException;
 use function is_resource;
+use LogicException;
+use function register_shutdown_function;
 use RuntimeException;
 
 final class IncludeInterceptor
@@ -65,8 +67,15 @@ final class IncludeInterceptor
      */
     private static $replacement;
 
-    public static function intercept($file, $with): void
+    /**
+     * @var bool
+     */
+    private static $wasIntercepted = false;
+
+    public static function intercept($file, $with, ?callable $shutdownHandler = null): void
     {
+        self::$wasIntercepted = false;
+
         if (!file_exists($file)) {
             throw new InvalidArgumentException('File to intercept and replace does not exist: ' . $file);
         }
@@ -76,6 +85,14 @@ final class IncludeInterceptor
         }
         self::$intercept = $file;
         self::$replacement = $with;
+
+        register_shutdown_function($shutdownHandler ?: static function (): void {
+            if (!self::$wasIntercepted) {
+                throw new LogicException(
+                    'Infection\'s IncludeInterceptor was not executed. Make sure you don\'t use any `file://` Stream Wrappers (like dg/bypass-finals)'
+                );
+            }
+        });
     }
 
     public static function enable(): void
@@ -101,6 +118,8 @@ final class IncludeInterceptor
         try {
             if ($including) {
                 if ($path === self::$intercept || realpath($path) === self::$intercept) {
+                    self::$wasIntercepted = true;
+
                     $this->fp = fopen(self::$replacement, 'r');
 
                     return true;
