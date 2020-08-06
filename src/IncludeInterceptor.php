@@ -221,6 +221,9 @@ final class IncludeInterceptor
         return $this->fp;
     }
 
+    /**
+     * @psalm-suppress InvalidPropertyAssignmentValue
+     */
     public function stream_close()
     {
         assert(is_resource($this->fp));
