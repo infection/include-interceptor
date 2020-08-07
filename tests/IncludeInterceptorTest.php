@@ -418,4 +418,19 @@ final class IncludeInterceptorTest extends TestCase
 
         $this->fail('Badly set up test, exception was not thrown');
     }
+
+    public function test_it_respects_symlinks_in_url_stat(): void
+    {
+        $expected = include self::$files[2];
+
+        IncludeInterceptor::intercept(self::$files[1], self::$files[2]);
+        IncludeInterceptor::enable();
+
+        $symlink = sys_get_temp_dir() . '/symlink-intercept';
+        self::$files[] = $symlink;
+
+        symlink(self::$files[2], $symlink);
+
+        $this->assertTrue(is_link($symlink));
+    }
 }
