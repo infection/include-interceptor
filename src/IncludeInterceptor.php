@@ -374,12 +374,20 @@ final class IncludeInterceptor
         return $return;
     }
 
-    public function url_stat($path)
+    public function url_stat($path, $flags)
     {
         self::disable();
 
         try {
-            return is_readable($path) ? stat($path) : false;
+            if (is_readable($path) === false) {
+                return false;
+            }
+
+            if ($flags & STREAM_URL_STAT_LINK) {
+                return lstat($path);
+            }
+
+            return stat($path);
         } finally {
             self::enable();
         }
