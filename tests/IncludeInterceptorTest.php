@@ -36,12 +36,16 @@ declare(strict_types=1);
 namespace Infection\Tests\StreamWrapper;
 
 use function count;
+use function file_put_contents;
 use Infection\StreamWrapper\IncludeInterceptor;
 use InvalidArgumentException;
+use function is_link;
 use const PHP_SAPI;
 use PHPUnit\Framework\Error\Warning;
 use PHPUnit\Framework\TestCase;
 use RuntimeException;
+use function symlink;
+use function sys_get_temp_dir;
 
 /**
  * Tests IncludeInterceptor for correct operation.
@@ -432,5 +436,16 @@ final class IncludeInterceptorTest extends TestCase
         symlink(self::$files[2], $symlink);
 
         $this->assertTrue(is_link($symlink));
+    }
+
+    public function test_it_works_with_locks(): void
+    {
+        IncludeInterceptor::intercept(self::$files[1], self::$files[2]);
+        IncludeInterceptor::enable();
+
+        // action - lock the file to check locking does not throw an exception with our stream wrapper
+        file_put_contents(self::$files[1], 'text', LOCK_EX);
+
+        $this->addToAssertionCount(1);
     }
 }
