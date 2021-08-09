@@ -249,7 +249,7 @@ final class IncludeInterceptor
     {
         assert(is_resource($this->fp));
 
-        return flock($this->fp, $operation);
+        return flock($this->fp, LOCK_SH);
     }
 
     public function stream_metadata($path, $option, $value)
