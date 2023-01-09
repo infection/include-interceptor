@@ -12,7 +12,7 @@
     "require": {},
     "require-dev": {
         "friendsofphp/php-cs-fixer": "^2.16",
-        "infection/infection": "^0.15.0",
+        "infection/infection": "^0.19.0",
         "phan/phan": "^2.4 || ^3",
         "php-coveralls/php-coveralls": "^2.2",
         "phpstan/phpstan": "^0.12.8",
@@ -20,7 +20,10 @@
         "vimeo/psalm": "^3.8"
     },
     "config": {
-        "sort-packages": true
+        "sort-packages": true,
+        "allow-plugins": {
+            "infection/extension-installer": true
+        }
     },
     "autoload": {
         "psr-4": {
