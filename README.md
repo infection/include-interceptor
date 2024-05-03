@@ -5,6 +5,12 @@
 
 It's a [Stream Wrapper](https://www.php.net/manual/en/book.stream.php) that wraps a [`file://`](https://www.php.net/manual/en/wrappers.file.php) protocol and allows overriding content of any (auto) loaded file, including files autoloaded by Composer package manager.
 
+## Installation
+
+```bash
+composer require infection/include-interceptor
+```
+
 ## How it works
 
 If you want to replace the content of the file whenever it's loaded (by executing `include '/path/to/file.php`, by calling `file_get_contents('/path/to/file.php')`, etc.), you need to register `IncludeInterceptor` _before_ loading original file:
