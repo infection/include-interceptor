@@ -249,7 +249,8 @@ final class IncludeInterceptor
     {
         assert(is_resource($this->fp));
 
-        return flock($this->fp, LOCK_SH);
+        // 0 is PHP asking whether locking is supported (e.g. file_put_contents() with LOCK_EX)
+        return $operation === 0 ? true : flock($this->fp, $operation);
     }
 
     public function stream_metadata($path, $option, $value)
