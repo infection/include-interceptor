@@ -448,4 +448,46 @@ final class IncludeInterceptorTest extends TestCase
 
         $this->addToAssertionCount(1);
     }
+
+    public function test_it_keeps_exclusive_locks_exclusive(): void
+    {
+        IncludeInterceptor::intercept(self::$files[1], self::$files[2]);
+        IncludeInterceptor::enable();
+
+        $lockFile = tempnam('', basename(__FILE__, 'php'));
+        $first = fopen($lockFile, 'c');
+        $second = fopen($lockFile, 'c');
+
+        try {
+            $this->assertTrue(flock($first, LOCK_EX | LOCK_NB));
+            $this->assertFalse(flock($second, LOCK_EX | LOCK_NB), 'A second exclusive lock must be refused');
+            $this->assertFalse(flock($second, LOCK_SH | LOCK_NB), 'A shared lock must be refused while an exclusive lock is held');
+
+            $this->assertTrue(flock($first, LOCK_UN));
+            $this->assertTrue(flock($second, LOCK_EX | LOCK_NB), 'The exclusive lock must be available once released');
+        } finally {
+            fclose($first);
+            fclose($second);
+            unlink($lockFile);
+        }
+    }
+
+    public function test_it_keeps_shared_locks_shared(): void
+    {
+        IncludeInterceptor::intercept(self::$files[1], self::$files[2]);
+        IncludeInterceptor::enable();
+
+        $lockFile = tempnam('', basename(__FILE__, 'php'));
+        $first = fopen($lockFile, 'c');
+        $second = fopen($lockFile, 'c');
+
+        try {
+            $this->assertTrue(flock($first, LOCK_SH | LOCK_NB));
+            $this->assertTrue(flock($second, LOCK_SH | LOCK_NB), 'Two shared locks must be allowed at the same time');
+        } finally {
+            fclose($first);
+            fclose($second);
+            unlink($lockFile);
+        }
+    }
 }
